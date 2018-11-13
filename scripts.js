@@ -16,6 +16,22 @@ const program = (() => {
     return (new Date(date)).toJSON().substring(0, 10);
   }
 
+  function fetchData(domain) {
+    fetch(`${API_URL}${domain}`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Villa kom upp!');
+      })
+      .then((value) => {
+        displayDomain(value.results);
+      })
+      .catch(() => {
+        displayError('Villa kemur upp við að sækja gögn');
+      });
+  }
+
   function displayError(error) {
     const container = domains.querySelector('.results');
     empty(container);
@@ -76,21 +92,6 @@ const program = (() => {
     container.appendChild(div);
   }
 
-  function fetchData(domain) {
-    fetch(`${API_URL}${domain}`)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Villa kom upp!');
-      })
-      .then((value) => {
-        displayDomain(value.results);
-      })
-      .catch(() => {
-        displayError('Villa við að sækja gögn');
-      });
-  }
 
   function onSubmit(e) {
     e.preventDefault();
